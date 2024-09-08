@@ -4,7 +4,11 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest     
+    defaults:
+        run:
+          shell: bash
+          working-directory: app
     strategy:
       matrix:
         python-version: ["3.8", "3.9", "3.10"]

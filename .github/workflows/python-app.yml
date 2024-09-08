@@ -14,9 +14,11 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    defaults:
+        run:
+          shell: bash
+          working-directory: app
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.10
