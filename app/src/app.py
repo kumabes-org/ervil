@@ -1,10 +1,9 @@
 """This is the main file that we use to start ervil app."""
 
 
-from flask import Flask #, url_for
-#from markupsafe import escape
-from flask_restful import Api, request #, Resource, reqparse
-from prometheus_client import Counter, make_wsgi_app #, Gauge
+from flask import Flask
+from flask_restful import Api, request
+from prometheus_client import Counter, make_wsgi_app
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 
