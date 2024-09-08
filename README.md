@@ -13,3 +13,9 @@ pip install -r requirements_tests.txt
 ## desativando ambiente virtual
 deactivate
 ```
+
+## Build docker image
+```
+cd app
+docker build -t ervil:0.0.1 .
+```
