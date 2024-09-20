@@ -1,13 +1,13 @@
 """This is the main file that we use to start ervil app."""
 
 
+from datetime import datetime
+import time
+import requests
 from flask import Flask, jsonify
 from flask_restful import Api, request
 from prometheus_client import Counter, make_wsgi_app, Gauge, Histogram
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
-import time
-import requests
-from datetime import datetime
 
 
 app = Flask(__name__)
@@ -21,11 +21,30 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
 
 login_com_sucesso = Counter('login_com_sucesso', 'Quantidade de login com sucesso!')
 login_com_falha = Counter('login_com_falha', 'Quantidade de login com falha!')
-tempo_processamento_index = Gauge('tempo_processamento_index', 'Tempo de processamento da página index.')
-LATENCY = Histogram('request_latency_seconds', 'Request Latency', labelnames=['path', 'method'])
-IN_PROGRESS = Gauge('inprogress_requests', 'Total number of requests in progress', labelnames=['path', 'method'])
-REQUESTS = Counter('http_requests_total', 'Total number of requests', labelnames=['path', 'method'])
-ERRORS = Counter('http_errors_total', 'Total number of errors', labelnames=['code'])
+tempo_processamento_index = Gauge(
+    'tempo_processamento_index',
+    'Tempo de processamento da página index.'
+)
+LATENCY = Histogram(
+    'request_latency_seconds',
+    'Request Latency',
+    labelnames=['path', 'method']
+)
+IN_PROGRESS = Gauge(
+    'inprogress_requests',
+    'Total number of requests in progress',
+    labelnames=['path', 'method']
+)
+REQUESTS = Counter(
+    'http_requests_total',
+    'Total number of requests',
+    labelnames=['path', 'method']
+)
+ERRORS = Counter(
+    'http_errors_total',
+    'Total number of errors',
+    labelnames=['code']
+)
 
 @app.get('/')
 def index():
@@ -60,7 +79,11 @@ def quotes(currency:str):
     headers = {
         "Content-Type": "application/json"
     }
-    r = requests.get(f"https://economia.awesomeapi.com.br/json/last/{currency}", headers=headers)
+    r = requests.get(
+        f"https://economia.awesomeapi.com.br/json/last/{currency}",
+        headers=headers,
+        timeout=30
+    )
     status_code = r.status_code
     data = r.json()
     key = currency.replace('-','')
@@ -79,15 +102,26 @@ def page_not_found(e):
     """
     Page Not Found
     """
+    print(e)
     ERRORS.labels('404').inc()
     return "page not found", 404
 
 def before_request():
+    """
+    Page Not Found
+    """
+    request_path = None
+    request_path = request_path is not None
     IN_PROGRESS.labels(request.method, request_path).inc()
     request.start_time = time.time()
 
 def after_request(response):
+    """
+    Page Not Found
+    """
     request_latency = time.time() - request.start_time
+    request_path = None
+    request_path = request_path is not None
     IN_PROGRESS.labels(request.method, request_path).dec()
     LATENCY.labels(request.method, request_path).observe(request_latency)
     return response
