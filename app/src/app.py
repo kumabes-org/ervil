@@ -110,8 +110,7 @@ def before_request():
     """
     Page Not Found
     """
-    request_path = None
-    request_path = request_path is not None
+    request_path = request_path is not None or None
     IN_PROGRESS.labels(request.method, request_path).inc()
     request.start_time = time.time()
 
@@ -120,8 +119,7 @@ def after_request(response):
     Page Not Found
     """
     request_latency = time.time() - request.start_time
-    request_path = None
-    request_path = request_path is not None
+    request_path = request_path is not None or None
     IN_PROGRESS.labels(request.method, request_path).dec()
     LATENCY.labels(request.method, request_path).observe(request_latency)
     return response
