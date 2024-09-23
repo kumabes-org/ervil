@@ -16,7 +16,7 @@ psycopg==3.2.2
 pytz==2024.2
 requests==2.32.3
 six==1.16.0
-SQLAlchemy==2.0.34
+SQLAlchemy==2.0.35
 typing_extensions==4.12.2
 urllib3==2.2.3
 Werkzeug==3.0.4
