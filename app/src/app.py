@@ -110,7 +110,7 @@ def before_request():
     """
     Page Not Found
     """
-    IN_PROGRESS.labels(request.method, request_path).inc()
+    IN_PROGRESS.labels(request.path, request.method).inc()
     request.start_time = time.time()
 
 def after_request(response):
@@ -118,11 +118,14 @@ def after_request(response):
     Page Not Found
     """
     request_latency = time.time() - request.start_time
-    IN_PROGRESS.labels(request.method, request_path).dec()
-    LATENCY.labels(request.method, request_path).observe(request_latency)
+    IN_PROGRESS.labels(request.path, request.method).dec()
+    LATENCY.labels(request.path, request.method).observe(request_latency)
     return response
+
+
+app.before_request(before_request)
+app.after_request(after_request)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
-    app.before_request(before_request)
-    app.after_request(after_request)
