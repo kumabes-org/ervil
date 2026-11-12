@@ -4,8 +4,8 @@
 ## Virtual Env
 ```
 pip install virtualenv --user
-virtualenv venv --python=python3.10.12
-source ./venv/bin/activate
+python -m venv .venv
+source .venv/Scripts/activate
 ## para desenvolvimento
 pip install -r requirements.txt
 ## para testes
